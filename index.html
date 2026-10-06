@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/bundle.js"></script>
     <title>✂️ Mavis' Chop Shop ✂️</title>
-    <script type="py" terminal worker src="./py/config.py"></script>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
     <style>
         /* --- ESTÉTICA Y2K / 2000s --- */
         :root {
@@ -266,8 +263,6 @@
         const resultOverlay = document.getElementById('result-overlay');
         const messageBox = document.getElementById('message-box');
 
-        // URL DO BACKEND NO RENDER
-        const BACKEND_URL = 'https://mavis-chop-shop-backend.onrender.com/remove-bg';
 
         // --- 1. POSICIONAMENTO BASEADO NO HORÁRIO ---
         function setRandomPosition() {
@@ -375,11 +370,16 @@
         // --- 5. ENVIA IMAGEM PARA O BACKEND ---
         async function sendToBackend() {
             const imageFile = fileInput.files[0];
-            console.log("Removendo fundo...");
-            // Chama a biblioteca @imgly que você já colocou no <head>
-            // Ela faz todo o processo no computador do usuário e devolve o blob da imagem transparente!
-            const blob = await imglyRemoveBackground(imageFile);
-            
+            console.log("Mavis está cortando o fundo...");
+
+            // Configuração obrigatória para o GitHub Pages achar os arquivos .wasm da IA
+            const config = {
+                publicPath: "https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.4.5/dist/",
+                debug: true
+            };
+
+            // Executa a remoção com os modelos carregados via CDN
+            const blob = await imglyRemoveBackground(imageFile, config);
             return blob;
         }
 
